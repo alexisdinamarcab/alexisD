@@ -31,9 +31,9 @@ pipeline {
         stage ('SonarQube analysis') {
            steps{
                 script {
-                    def scannerHome = tool 'SonarQube Scanner';
+                    def SonarScanner = tool 'SonarQube Scanner';
                     withSonarQubeEnv('Sonar Server') {
-                      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.java.binaries=target/ -Dsonar.host.url=http://0.0.0.0:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
+                      sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.java.binaries=target/ -Dsonar.host.url=http://0.0.0.0:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
                   }
                 }
             }
