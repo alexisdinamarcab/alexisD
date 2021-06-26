@@ -22,21 +22,21 @@ pipeline {
                 echo '========================================='
             }
         }
-        stage ('SCA') {
-            steps {
-                sh './mvnw org.owasp:dependency-check-maven:check'
-                //dependencyCheckPublisher failedNewCritical: 5, failedTotalCritical: 10, pattern: 'terget/dad.xml', unstableNewCritical: 3, unstableTotalCritical: 5
-            }
-        }
         stage ('SonarQube analysis') {
            steps{
                 script {
                     def SonarScanner = tool 'SonarQube Scanner';
                     withSonarQubeEnv('Sonar Server') {
-                      sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.java.binaries=target/ -Dsonar.host.url=http://localhost:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
+                      sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.sources=target/ -Dsonar.host.url=http://localhost:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
                   }
                 }
             }
+        stage ('SCA') {
+            steps {
+                sh 'mvn org.owasp:dependency-check-maven:check'
+                //dependencyCheckPublisher failedNewCritical: 5, failedTotalCritical: 10, pattern: 'terget/dad.xml', unstableNewCritical: 3, unstableTotalCritical: 5
+            }
+        }
         //stage ('ZAP'){
           //  steps {
              //   figlet 'Owasp Zap DAST'
