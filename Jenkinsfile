@@ -31,6 +31,7 @@ pipeline {
                   }
                 }
             }
+        }
         stage ('SCA') {
             steps {
                 sh 'mvn org.owasp:dependency-check-maven:check'
