@@ -34,9 +34,10 @@ pipeline {
                 script{
                     env.DOCKER = tool "Docker"
                     env.DOCKER_EXEC = "${DOCKER}/bin/docker"
-                    env.TARGET ='https://demo.testfire.net/'
-
-                    sh '${DOCKER_EXEC} ps'
+                    sh '${DOCKER_EXEC} rm -f zap2'
+                    sh '${DOCKER_EXEC} pull owasp/zap2docker-stable'
+                    sh '${DOCKER_EXEC} run --add-host="localhost:0.0.0.0" --rm -e LC_ALL=C.UTF-8 -e LANG=C.UTF-8 --name zap2 -u zap -p 8090:8080 -d owasp/zap2docker-stable zap.sh -daemon -port 8080 -host 0.0.0.0 -config api.disablekey=true'
+                    sh '${DOCKER_EXEC} run --add-host="localhost:0.0.0.0" -v /home/kali/DevSecOps/zap:/zap/wrk/:rw --rm -i owasp/zap2docker-stable zap-full-scan.py -t "http://demo.testfire.net/" -I -r zap_baseline_report2.html -l PASS'
                 }
             }
         }
