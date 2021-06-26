@@ -28,6 +28,15 @@ pipeline {
                 dependencyCheckPublisher failedNewCritical: 5, failedTotalCritical: 10, pattern: 'terget/dad.xml', unstableNewCritical: 3, unstableTotalCritical: 5
             }
         }
+        stage ('SonarQube analysis') {
+           steps{
+                script {
+                    def scannerHome = tool 'SonarQube Scanner';
+                    withSonarQubeEnv('Sonar Server') {
+                      sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.java.binaries=target/ -Dsonar.host.url=http://0.0.0.0:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
+                  }
+                }
+            }
         stage ('ZAP'){
             steps {
                 figlet 'Owasp Zap DAST'
