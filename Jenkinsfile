@@ -34,7 +34,7 @@ pipeline {
         }
         stage ('SCA') {
             steps {
-                sh 'mvn dependency-check:check'
+                sh 'mvn org.owasp:dependency-check-maven:check'
                 dependencyCheckPublisher pattern: 'target/dad.xml'
             }
         }
