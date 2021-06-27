@@ -34,8 +34,8 @@ pipeline {
         }
         stage ('SCA') {
             steps {
-                sh 'mvn org.owasp:dependency-check-maven:check'
-                dependencyCheckPublisher pattern: 'target/dad.xml'
+                sh 'mvn org.owasp:dependency-check-maven:aggregate'
+                dependencyCheckPublisher pattern: '${WORKSPACE}/target/dependency-check-report.html'
             }
         }
         stage ('ZAP'){
