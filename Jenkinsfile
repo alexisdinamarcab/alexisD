@@ -25,7 +25,7 @@ pipeline {
         stage ('SonarQube analysis') {
            steps{
                 script {
-                    def SonarScanner = tool "SonarQube Scanner", type: 'hudson.plugins.sonar.SonarRunnerInstallation';
+                    def SonarScanner = tool "SonarQube Scanner";
                     withSonarQubeEnv('Sonar Server') {
                       sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=tareausach -Dsonar.sources=target/ -Dsonar.host.url=http://localhost:9000 -Dsonar.login=324806140df35a6fe38ff92cef4b99446f941f36"
                   }
@@ -50,6 +50,19 @@ pipeline {
                     sh '${DOCKER_EXEC} run --add-host="localhost:0.0.0.0" -v /home/kali/DevSecOps/zap:/zap/wrk/:rw --rm -i owasp/zap2docker-stable zap-full-scan.py -t "http://demo.testfire.net/" -I -r zap_baseline_report2.html -l PASS'
                 }
             }
-        }    
+        }
+        stage('Scan Docker'){
+            steps{
+                figlet 'Scan Docker'
+                script{
+                    env.DOCKER = tool "Docker"
+                    env.DOCKER_EXEC = "${DOCKER}/bin/docker"
+                    sh '''
+                    ${DOCKER_EXEC} run --rm -v $(pwd):/root/.cache/ aquasec/trivy python:3.4-alpine
+                    '''
+                    sh '${DOCKER_EXEC} rmi aquasec/trivy'
+                }
+            }
+        }   
     }
 }
