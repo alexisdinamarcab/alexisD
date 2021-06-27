@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+         maven 'Maven'
+    }
     stages {
       stage ('Build') {
             steps {
@@ -34,8 +37,8 @@ pipeline {
         }
         stage ('SCA') {
             steps {
-                sh 'mvn org.owasp:dependency-check-maven:check'
-                dependencyCheckPublisher failedNewCritical: 5, failedTotalCritical: 10, pattern: 'target/dad.xml', unstableNewCritical: 3, unstableTotalCritical: 5
+                sh 'mvn dependency-check:check'
+                dependencyCheckPublisher pattern: 'target/dad.xml'
             }
         }
         stage ('ZAP'){
