@@ -27,7 +27,7 @@ pipeline {
                 script {
                     def SonarScanner = tool "SonarScanner";
                     withSonarQubeEnv('Sonar Server') {
-                      sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=ayudantia -Dsonar.host.url=http://172.18.0.2:9000 -Dsonar.login=aacf352390357dd383acce70b1e7c087e35c8cb3"
+                      sh "${SonarScanner}/bin/sonar-scanner -Dsonar.projectKey=ayudantia -Dsonar.dependencyCheck.jsonReportPath=target/dependency-check-report.json -Dsonar.host.url=http://172.18.0.2:9000 -Dsonar.login=aacf352390357dd383acce70b1e7c087e35c8cb3"
                   }
                 }
             }
