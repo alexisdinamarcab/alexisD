@@ -38,7 +38,7 @@ pipeline {
                 dependencyCheckPublisher pattern: '${WORKSPACE}/target/dependency-check-report.html'
             }
         }
-        stage ('ZAP'){
+        //stage ('ZAP'){
             steps {
                 //figlet 'Owasp Zap DAST'   //${DOCKER_EXE}
                 script{
@@ -50,7 +50,7 @@ pipeline {
                     sh '${DOCKER} run --add-host="localhost:127.0.0.1" -v /var/jenkins_home/ZAP_2.10.0:/zap/wrk/:rw --rm -i owasp/zap2docker-stable zap-full-scan.py -t "http://demo.testfire.net/" -I -r zap_baseline_report2.html -l PASS'
                 }
             }
-        }
+        //}
         stage('Scan Docker'){
             steps{
                 figlet 'Scan Docker'
@@ -58,9 +58,9 @@ pipeline {
                     env.DOCKER = tool "Docker"
                     env.DOCKER_EXEC = "${DOCKER}/bin/docker"
                     sh '''
-                    ${DOCKER_EXEC} run --rm -v $(pwd):/root/.cache/ aquasec/trivy python:3.4-alpine
+                    ${DOCKER} run --rm -v $(pwd):/root/.cache/ aquasec/trivy python:3.4-alpine
                     '''
-                    sh '${DOCKER_EXEC} rmi aquasec/trivy'
+                    sh '${DOCKER} rmi aquasec/trivy'
                 }
             }
         }   
