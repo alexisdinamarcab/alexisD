@@ -53,7 +53,7 @@ pipeline {
         //}
         stage('Scan Docker'){
             steps{
-                figlet 'Scan Docker'
+                // figlet 'Scan Docker'
                 script{
                     env.DOCKER = tool "Docker"
                     env.DOCKER_EXEC = "${DOCKER}/bin/docker"
